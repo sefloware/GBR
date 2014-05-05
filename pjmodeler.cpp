@@ -11,7 +11,6 @@
 #include "pjmodeler.h"
 #include "mdparout.h"
 #include "mdeditor.h"
-#include "compenv.h"
 #include "config.h"
 #include "mdparoutdelegate.h"
 #include "mddebug.h"
@@ -390,7 +389,7 @@ void PjModeler::debug()
     if(!paroutModel->generateMain(dir.absoluteFilePath("main.cpp"),dir.absoluteFilePath("debug")) )
         return;
 
-    QString cc = CE::debugCompilerCommand(mdDebug->currentIndex() );
+    QString cc = mdDebug->debugCmdStr();
     if(cc.isEmpty())
         return;
 

@@ -17,6 +17,8 @@ QT_BEGIN_NAMESPACE
 class QComboBox;
 class QToolButton;
 class QLabel;
+class QFileSystemModel;
+class QFileInfo;
 QT_END_NAMESPACE
 
 class SimulationBar : public QToolBar
@@ -24,18 +26,18 @@ class SimulationBar : public QToolBar
     Q_OBJECT
 public:
     SimulationBar(QWidget *parent = 0);
-    QModelIndex currentIndex() const;
+    QFileInfo currentEnvInfo() const;
 signals:
     void exportTriggered();
     void simulationTriggered(bool show);
 private slots:
     void showSimulation(bool show);
-    void editRunEnv();
 private:
-    QAction *settingAction;
     QToolButton *exportButton;
     QToolButton *simuButton;
     QComboBox *box;
+
+    QFileSystemModel *envModel;
 };
 
 #endif // SIMULATIONBAR_H

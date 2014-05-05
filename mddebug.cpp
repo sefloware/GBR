@@ -18,6 +18,7 @@
 #include <QPlainTextEdit>
 #include <QByteArray>
 #include <QStandardItemModel>
+#include <QFileSystemModel>
 #include <QTextCodec>
 #include <QDialogButtonBox>
 #include <QComboBox>
@@ -26,12 +27,9 @@
 MdDebug::MdDebug(QWidget *parent) :
     QToolBar(parent)
 {
-    box = new QComboBox;
-    box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-    box->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    box = new QLabel;
 
     clearAction = new QAction(QIcon(":/icon/images/clean.png"), tr("Clear"),this);
-    settingAction = new QAction(QIcon(":/icon/images/settings.png"),"Setting",this);
     stopAction = new QAction(QIcon(":/icon/images/stop.png"), tr("Stop"),this);
     stopAction->setEnabled(false);
     runAction = new QAction(QIcon(":/icon/images/run.png"), tr("Run"),this );
@@ -55,8 +53,6 @@ MdDebug::MdDebug(QWidget *parent) :
     this->setObjectName("TitleBar");
     this->addWidget(envLabel);
     this->addWidget (box);
-    this->addAction(settingAction);
-    this->addSeparator();
     this->addAction (runAction);
     this->addAction (stopAction);
     this->addSeparator();
@@ -72,7 +68,9 @@ MdDebug::MdDebug(QWidget *parent) :
     setDebugMode(false);
     clearOutputWindow();
 
-    box->setModel(&runevmodel());
+    QFile _tmpFile(QDir(absolutePath(ConfigFolder)).absoluteFilePath("debug_cmd"));
+    box->setText(QString(_tmpFile.readAll()).simplified());
+
     process->setProcessEnvironment(QProcessEnvironment::systemEnvironment());
     connect(process, SIGNAL(readyRead()), this, SLOT(readOutput()));
     connect(process, SIGNAL(error(QProcess::ProcessError)),this,SLOT(handError(QProcess::ProcessError)) );
@@ -89,7 +87,7 @@ MdDebug::MdDebug(QWidget *parent) :
     connect(switcher,SIGNAL(clicked(bool)),this,SLOT(setDebugMode(bool)) );
     connect(clearAction,SIGNAL(triggered()),this,SLOT(clearOutputWindow()) );
     connect(exploreAction,SIGNAL(triggered()),this,SIGNAL(exploreDebugFolder()) );
-    connect(settingAction,SIGNAL(triggered()),this,SLOT(editRunEnv()) );
+
 }
 
 MdDebug::~MdDebug()
@@ -122,9 +120,6 @@ void MdDebug::clearOutputWindow()
     textOutput->setPlainText("Output Window");
 }
 
-void MdDebug::editRunEnv()
-{ editrunenv(this); }
-
 void MdDebug::setWorkingDirectory(const QString &dir)
 { process->setWorkingDirectory(dir); }
 
@@ -143,8 +138,9 @@ void MdDebug::run(const QStringList &commands)
     }
 }
 
-QModelIndex MdDebug::currentIndex() const
-{  return runevmodel().index(box->currentIndex(),0); }
+
+QString MdDebug::debugCmdStr() const
+{  return box->text();}
 
 QDir MdDebug::workingDirectory() const
 { return QDir(process->workingDirectory()); }

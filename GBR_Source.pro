@@ -51,7 +51,6 @@ SOURCES += main.cpp\
     mdparout.cpp \
     pjanalyser.cpp \
     pjmodeler.cpp \
-    compenv.cpp \
     seed.cpp \
     seeddialog.cpp \
     simulationbar.cpp \
@@ -99,7 +98,6 @@ HEADERS  += mainwindow.h \
     pjmodeler.h \
     mdparout.h \
     qrcfile.h \
-    compenv.h \
     seeddialog.h \
     simulationbar.h \
     stcode.h \
@@ -109,8 +107,7 @@ HEADERS  += mainwindow.h \
     tabledelegate.h
 
 FORMS    += \
-    outputdialog.ui \
-    compenv.ui
+    outputdialog.ui
 
 RESOURCES += \
     source.qrc

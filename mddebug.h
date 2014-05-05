@@ -19,10 +19,12 @@ class QDir;
 class QLabel;
 class QToolBar;
 class QLineEdit;
+class QFileInfo;
 class QComboBox;
 class QToolButton;
 class QPlainTextEdit;
 class QDialogButtonBox;
+class QFileSystemModel;
 QT_END_NAMESPACE
 
 class MdDebug : public QToolBar
@@ -33,7 +35,7 @@ public:
     explicit MdDebug(QWidget *parent = 0);
     ~MdDebug();
     void run(const QStringList &commands);
-    QModelIndex currentIndex() const;
+    QString debugCmdStr() const;
     QDir workingDirectory() const;
     void setWorkingDirectory(const QString &dir);
 
@@ -47,14 +49,13 @@ private slots:
     void handError(QProcess::ProcessError error);
     void slotFinished(int exitCode);
 
-    void editRunEnv();
     void clearOutputWindow();
     void stopProcess();
     void runProcess();
 public:
     QPlainTextEdit* textOutput;
 private:
-    QComboBox *box;
+    QLabel *box;
     QAction *settingAction;
     QAction *clearAction;
     QAction *stopAction;

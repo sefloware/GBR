@@ -49,6 +49,7 @@ private slots:
     void setLineEdit(const QModelIndex &current);
 private:
     bool lockParameter();
+    void generateBatch(const QString &path,const QFileInfo &envInfo);
 private:
     const QDir &root;
     ParoutModel *pm;

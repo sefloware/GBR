@@ -82,10 +82,6 @@
         <file>files/cppkeys</file>
         <file>files/fun0.cpp</file>
         <file>files/main.cpp</file>
-        <file>files/run.cmd</file>
-        <file>files/run.sh</file>
-        <file>files/runpbs.sh</file>
         <file>files/welcome.html</file>
-        <file>files/qsub.sh</file>
     </qresource>
 </RCC>

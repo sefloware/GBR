@@ -13,7 +13,6 @@
 
 #include "config.h"
 #include "cppkeywords.h"
-#include "compenv.h"
 #include <QStandardItemModel>
 #include <QString>
 #include <QDir>
@@ -22,12 +21,6 @@
 cppkeywords &cppkeys()
 {
     static cppkeywords model;
-    return model;
-}
-
-QStandardItemModel &runevmodel()
-{
-    static QStandardItemModel model;
     return model;
 }
 
@@ -53,77 +46,6 @@ bool insureDirectory(const QString &directory)
         return false;
 
     return true;
-}
-
-void editrunenv(QWidget *parent)
-{
-    QString path = absolutePath(ConfigFolder);
-    if( path.isEmpty())
-        return;
-
-    path = QDir(path).absoluteFilePath("runenv");
-    QFile file(path);
-    if (! file.open(QIODevice::ReadWrite))
-        return;
-
-    CEDialog dialog(parent);
-    dialog.setPlainText( file.readAll());
-    dialog.setWindowFilePath(path);
-    file.close();
-
-    if( dialog.exec() && dialog.isWindowModified())
-    {
-        if(! file.open(QIODevice::WriteOnly | QIODevice::Truncate) )
-            return;
-
-        QString text = dialog.plainText();
-        file.write(text.toLatin1());
-        file.close();
-        readRunEnv();
-    }
-}
-
-void readRunEnv()
-{
-    const QString path = absolutePath(ConfigFolder);
-    if(path.isEmpty())
-        return;
-
-    QFile file(QDir(path). absoluteFilePath("runenv"));
-    if (! file.open(QIODevice::ReadOnly))
-        return ;
-
-    runevmodel().setRowCount(0);
-
-    QByteArray data = file.readAll();
-    std::string line = data.data();
-
-    using boost::spirit::ascii::space;
-    std::string::iterator iter = line.begin();
-    std::string::iterator end = line.end();
-    std::vector<client::runenvtype> result;
-    client::RunenvGrammar<std::string::iterator> rg;
-    phrase_parse(iter, end, rg, space, result) ;
-
-    for (unsigned i=0; i<result.size(); ++i)
-    {
-        client::runenvtype &it = result[i];
-        std::string &platform = it.platform;
-        std::transform(platform.begin(), platform.end(), platform.begin(), ::tolower);
-        std::map<std::string,CE::PlatForm>::const_iterator flag = CE::paltformmap().find(platform);
-        if( flag == CE::paltformmap().end())
-            continue;
-        QStandardItem *item = new QStandardItem(QString::fromStdString(it.show()).trimmed() );
-        item->setData(QString::fromStdString(it.threadnum).trimmed(),CE::ThreadNumRole);
-        item->setData(flag->second, CE::PlatformRole);
-        item->setData(QString::fromStdString(it.compiler.name).trimmed(), CE::CNameRole);
-        item->setData(QString::fromStdString(it.compiler.optimize).trimmed(),CE::COptimizationRole);
-        item->setData(QString::fromStdString(it.compiler.output).trimmed(),CE::COutputRole);
-        item->setData(QString::fromStdString(it.compiler.include).trimmed(),CE::CIncludepathRole);
-        item->setData(QString::fromStdString(it.compiler.macro).trimmed(),CE::CMacroRole);
-        item->setData(QString::fromStdString(it.toottip()).trimmed(),Qt::ToolTipRole);
-        runevmodel().appendRow(item);
-    }
 }
 
 QString identification(const QString &name, const QStringList &outputs, const QStringList &ids, const QString version)

@@ -17,16 +17,20 @@
 #include <QVBoxLayout>
 #include <QAction>
 #include <QStandardItemModel>
+#include <QFileSystemModel>
 
 SimulationBar::SimulationBar(QWidget *parent) :
     QToolBar(parent)
-{
+{ 
+    envModel = new QFileSystemModel(this);
+    envModel->setFilter(QDir::Files);
+    envModel->setNameFilters(QStringList()<< "*.cmd" << "*.sh");
+    envModel->setRootPath(absolutePath(ConfigFolder));
+
     box = new QComboBox;
     box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     box->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    box->setModel(&runevmodel());
-
-    settingAction = new QAction(QIcon(":/icon/images/settings.png"), tr("Setting..."),this);
+    box->setModel(envModel);
 
     exportButton = new QToolButton;
     exportButton->setIcon(QIcon(":/icon/images/task.png"));
@@ -49,24 +53,18 @@ SimulationBar::SimulationBar(QWidget *parent) :
     this->setObjectName("TitleBar");
     this->addWidget(envLabel);
     this->addWidget (box);
-    this->addAction(settingAction);
-    this->addSeparator();
     this->addWidget (exportButton);
     this->addWidget(sep);
     this->addWidget(simuButton);
 
     showSimulation(false);
 
-    connect(settingAction,SIGNAL(triggered(bool)),this,SLOT(editRunEnv()) );
     connect(exportButton,SIGNAL(clicked()),this,SIGNAL(exportTriggered()) );
     connect(simuButton,SIGNAL(toggled(bool)),this,SLOT(showSimulation(bool)) );
 }
 
-void SimulationBar::editRunEnv()
-{ editrunenv(this); }
-
-QModelIndex SimulationBar::currentIndex() const
-{  return runevmodel().index(box->currentIndex(),0); }
+QFileInfo SimulationBar::currentEnvInfo() const
+{  return QFileInfo(envModel->rootDirectory().absoluteFilePath(box->currentText()) );}
 
 void SimulationBar::showSimulation(bool show)
 {

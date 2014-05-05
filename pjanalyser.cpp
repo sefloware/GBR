@@ -17,7 +17,6 @@
 #include "simulationbar.h"
 #include "stcode.h"
 #include "table.h"
-#include "compenv.h"
 #include "seed.h"
 #include "config.h"
 #include "outputdialog.h"
@@ -35,6 +34,7 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <QDir>
+#include <QUrl>
 
 PjAnalyser::PjAnalyser(const QDir &root,
                      QWidget *parent)
@@ -213,7 +213,7 @@ void PjAnalyser::exportSimulationTask()
     fpi.write(outstr.toLatin1());
     fpi.close();
 
-    CE::generateBatch(path, simExport->currentIndex(), this);
+    generateBatch(path, simExport->currentEnvInfo());
 
     if(! seedsource(path) (seednum*10) )
     {
@@ -222,5 +222,23 @@ void PjAnalyser::exportSimulationTask()
     }
 
     QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+}
+
+void PjAnalyser::generateBatch(const QString &path, const QFileInfo &envInfo)
+{
+    if(!envInfo.isFile())
+        return;
+
+    QDir dir(path);
+    assert(dir.exists());
+
+   QFileInfoList _names = envInfo.absoluteDir().entryInfoList(QStringList(envInfo.baseName().append(".*")),QDir::Files);
+   foreach (const QFileInfo &it, _names) {
+       if(! QFile::copy(it.absoluteFilePath(),dir.absoluteFilePath(it.fileName())) )
+       {
+           QMessageBox::critical(this,QObject::tr("Error"),"Failed to create "+it.fileName(),QMessageBox::Ok,QMessageBox::Ok);
+           break;
+       }
+   }
 }
 

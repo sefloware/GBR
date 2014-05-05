@@ -328,16 +328,17 @@ bool Projist::importFile(const QString &source, const QDir &destination)
     {
         int pos = sn.lastIndexOf('.');
         sn.insert(pos,"_*");
+        ++pos;
+
         QStringList list = destination.entryList(QStringList(sn),QDir::Files,QDir::Name);
-        int count = 0;
-        if(! list.isEmpty())
-        {
+        QList<int> idlist;
+        foreach (const QString &it, list) {
             bool ok;
-            count = list.last().mid(pos+1,list.last().lastIndexOf('.')-(pos+1) ).toInt(&ok);
+            idlist << it.mid(pos, it.lastIndexOf('.')-pos ).toInt(&ok);
             if(! ok) return false;
-            ++count;
         }
-        sn.replace('*',QString::number(count));
+        qSort(idlist);
+        sn.replace('*',QString::number( idlist.isEmpty() ? 0 : idlist.last()+1) );
         return QFile::copy(source,destination.absoluteFilePath(sn)) ;
     }
 }

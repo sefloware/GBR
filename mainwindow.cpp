@@ -15,7 +15,6 @@
 #include "startpage.h"
 #include "pjmodeler.h"
 #include "pjanalyser.h"
-#include "compenv.h"
 #include "cppkeywords.h"
 #include "config.h"
 #include "assert.h"
@@ -45,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(startPage->codist,SIGNAL(updateEditorEnvironment()), this, SLOT(updateEditorEnvironment()) );
 
     setCentralWidget(tabWidget);
-    readRunEnv();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

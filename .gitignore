@@ -1,0 +1,16 @@
+#ignore all release and debug directories 
+release/
+debug/
+boost/
+
+#ignore all Makefile*
+Makefile*
+
+#ignore all ui_*.h.
+ui_*.h
+
+#ignore all *.pro.*
+*.pro.*
+
+#ignore all log file
+*.log

@@ -1,0 +1,229 @@
+QDialog {
+background-color: beige;
+}
+
+/*****Button*****/
+QAbstractButton {
+       font: bold;
+   }
+
+QPushButton {
+    background-color: palegoldenrod;
+    border: none;
+    border-width: 2px;
+    border-color: darkkhaki;
+    border-style: solid;
+    border-radius: 5;
+    padding: 3px;
+    min-width: 9ex;
+    min-height: 2.5ex;
+}
+
+QPushButton:hover {
+   background-color: khaki;
+}
+
+/* Increase the padding, so the text is shifted when the button is
+   pressed. */
+QPushButton:pressed {
+    padding-left: 5px;
+    padding-top: 5px;
+    background-color: #d0d67c;
+}
+
+QToolButton#Switcher {
+border-color: dark;
+background-color: #AEBBC7;
+color: green;
+}
+
+QToolButton#ToolButton {
+color: lightgreen;
+}
+
+/*************/
+
+/*****QLabel*****/
+QLabel {
+    font: normal;
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+QLabel#TitleLabel {
+font: normal 17pt;
+color: white;
+}
+/*************/
+
+/*****QToolBar*****/
+
+QToolBar#TitleBar {
+spacing: 3px;
+background-color: #6A7D8E;
+border-width: 1px;
+border-color: #6A7D8E;
+border-style: solid;
+}
+/*************/
+
+/*****QAbstractItemView*****/
+/* Make the entire row selected in item views. */
+QAbstractItemView {
+border: none;
+font-size: 16pt;
+show-decoration-selected: 1;
+}
+
+QListView,QTreeView {
+margin-top: 1px;
+margin-bottom: 1px;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #dee2a3, stop: 1 beige);
+}
+
+QTreeView > QHeaderView::section {
+background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                  stop:0 #616161, stop: 0.5 #505050,
+                                  stop: 0.6 #434343, stop:1 #656565);
+color: white;
+padding-left: 4px;
+border: 1px solid #6c6c6c;
+}
+
+QTreeView#PlainList {
+background-color: transparent;
+border-style: none;
+margin-top: 3px;
+}
+
+TableView {
+border-width: 1px;
+padding: 1px;
+gridline-color: #d8d8f2;
+}
+
+TableView > QHeaderView::section {
+background-color: #DDE6F4;
+padding-left: 4px;
+border: 1px solid #d8d8f2;
+}
+
+TableView > QHeaderView::section:checked {
+    background-color:  #FDE359;
+}
+
+TableView QTableCornerButton::section {
+    background: #DDE6F4;
+    border-style: solid;
+    border: 1px solid #d8d8f2;
+}
+
+/*************/
+
+
+/*****QWidget*****/
+QWidget#LineNumberArea {
+background-color: #DDDDDD;
+font: normal;
+color: #555555;
+}
+/*************/
+
+/*****Workspace*****/
+QPlainTextEdit {
+       border-width: 1px;
+       padding: 1px;
+       border-style: solid;
+       margin-bottom: 0px;
+}
+
+QPlainTextEdit#DebugDisplayer {
+border-style: solid;
+border-color: #6A7D8E;
+border-width: 2px;
+background-color: transparent;
+}
+
+RichTextEdit,RichTextWidget {
+border-style: flat;
+}
+
+QLineEdit {
+    background-color: white;
+    min-width: 8ex;
+    font: normal 15pt;
+}
+
+QLineEdit:read-only {
+    background: #AEBBCA;
+}
+
+QLineEdit:focus, QFrame:focus {
+    border-width: 2px;
+    padding: 0px;
+}
+/*************/
+
+QTabWidget::tab-bar {
+    left: 5px; /* move to the right by 5px */
+}
+
+QTabBar::tab {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+    border: 1px solid #C4C4C3;
+    border-bottom-color: #D3D3D3; /* same as the pane color */
+    min-width: 25ex;
+    padding: 0px;
+}
+
+QTabBar::tab:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #E9E9E9, stop: 0.4 #E3E3E3,
+                                stop: 0.5 #D7e7e7, stop: 1.0 #E9E9E9);
+}
+
+QTabBar::tab:selected {
+    background: white;
+    border-color: #9B9B9B;
+    border-bottom-color: white; /* same as pane color */
+}
+
+QComboBox:on { /* shift the text when the popup opens  */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/icon/images/darkarrowdown.png);
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: cornsilk;
+    selection-color: #0a214c;
+    selection-background-color: #C19A6B;
+}
+
+/* A QToolTip is a QLabel ... */
+QToolTip {
+    border: 2px solid darkkhaki;
+    padding: 2px;
+    border-radius: 2px;
+    opacity: 80;
+}

@@ -8,7 +8,6 @@
 */
 
 #include "compenv.h"
-#include "ui_runenvdialog.h"
 #include "mainwindow.h"
 #include "assert.h"
 #include <QComboBox>

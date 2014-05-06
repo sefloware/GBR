@@ -29,7 +29,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    this->setWindowOpacity(0);
+    //this->setWindowOpacity(0);
     this->setWindowIcon(QIcon(":/icon/images/GBR.png"));
 
     tabWidget = new QTabWidget;

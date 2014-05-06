@@ -52,15 +52,16 @@ private slots:
     void clearOutputWindow();
     void stopProcess();
     void runProcess();
+    void editCMD();
 public:
     QPlainTextEdit* textOutput;
 private:
     QLabel *box;
-    QAction *settingAction;
     QAction *clearAction;
     QAction *stopAction;
     QAction *runAction;
     QAction *exploreAction;
+    QToolButton *envButton;
     QToolButton *switcher;
 
     QProcess* process;

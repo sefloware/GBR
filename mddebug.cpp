@@ -9,9 +9,11 @@
 
 #include "mddebug.h"
 #include "config.h"
+#include "texteditdialog.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QPushButton>
 #include <QLineEdit>
 #include <QToolButton>
 #include <QDir>
@@ -23,11 +25,14 @@
 #include <QDialogButtonBox>
 #include <QComboBox>
 #include <QAction>
+#include <QDebug>
 
 MdDebug::MdDebug(QWidget *parent) :
     QToolBar(parent)
 {
-    box = new QLabel;
+
+    box = new QLabel(tr("Debug is unavailable"));
+    box->setMaximumWidth(300);
 
     clearAction = new QAction(QIcon(":/icon/images/clean.png"), tr("Clear"),this);
     stopAction = new QAction(QIcon(":/icon/images/stop.png"), tr("Stop"),this);
@@ -47,11 +52,12 @@ MdDebug::MdDebug(QWidget *parent) :
 
     process = new QProcess(this);
 
-    QLabel *envLabel = new QLabel("Execution Environment: ");
-    envLabel->setObjectName("TitleLabel");
+    envButton = new QToolButton(this);
+    envButton->setText("Execution Environment");
+    envButton->setObjectName("TitleButton");
 
     this->setObjectName("TitleBar");
-    this->addWidget(envLabel);
+    this->addWidget(envButton);
     this->addWidget (box);
     this->addAction (runAction);
     this->addAction (stopAction);
@@ -68,8 +74,8 @@ MdDebug::MdDebug(QWidget *parent) :
     setDebugMode(false);
     clearOutputWindow();
 
-    QFile _tmpFile(QDir(absolutePath(ConfigFolder)).absoluteFilePath("debug_cmd"));
-    box->setText(QString(_tmpFile.readAll()).simplified());
+    if( myInfos().size() > 0)
+        box->setText(myInfos().at(0));
 
     process->setProcessEnvironment(QProcessEnvironment::systemEnvironment());
     connect(process, SIGNAL(readyRead()), this, SLOT(readOutput()));
@@ -87,7 +93,26 @@ MdDebug::MdDebug(QWidget *parent) :
     connect(switcher,SIGNAL(clicked(bool)),this,SLOT(setDebugMode(bool)) );
     connect(clearAction,SIGNAL(triggered()),this,SLOT(clearOutputWindow()) );
     connect(exploreAction,SIGNAL(triggered()),this,SIGNAL(exploreDebugFolder()) );
+    connect(envButton,SIGNAL(clicked()),this,SLOT(editCMD()) );
+}
 
+void MdDebug::editCMD()
+{
+    TextEditDialog dialog(this);
+    if(!myInfos().empty())
+        dialog.setPlainText(myInfos().at(0));
+
+    if(dialog.exec() )
+    {
+        if(myInfos().empty())
+            myInfos().append(dialog.plainText());
+        else
+            myInfos().replace(0,dialog.plainText());
+        if(! writeInfo(myInfos()))
+            return;
+
+        box->setText(myInfos().at(0));
+    }
 }
 
 MdDebug::~MdDebug()

@@ -26,14 +26,18 @@ class QStringList;
 class QWidget;
 QT_END_NAMESPACE
 
+enum MyInfoFlag {HomePath, DebugCMD};
+QStringList &myInfos();
 
 cppkeywords &cppkeys();
 bool insureDirectory(const QString &directory);
 
-enum FolderFlag {ProjectFolder, SourceFolder, ConfigFolder};
+enum MyNameFlags {ProjectFolder, SourceFolder, ConfigFolder,InfoFile};
+QStringList &readInfo();
+bool writeInfo(const QStringList &infos);
 
-extern const QString folderName[];
-QString absolutePath(FolderFlag flag);
+extern const QString MyNames[];
+QString absolutePath(MyNameFlags flag);
 
 QMap<QString, QString> parseIdentification(const QString &identification);
 QString identification(const QString &name, const QStringList &outputs, const QStringList &ids, const QString version);

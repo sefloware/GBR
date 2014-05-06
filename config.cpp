@@ -17,6 +17,13 @@
 #include <QString>
 #include <QDir>
 #include <QFile>
+#include <QDebug>
+
+QStringList &myInfos()
+{
+    static QStringList info;
+    return info;
+}
 
 cppkeywords &cppkeys()
 {
@@ -24,15 +31,64 @@ cppkeywords &cppkeys()
     return model;
 }
 
-const QString folderName[] = {"project", "source", "configure" };
+const QString MyNames[] = {"project", "source", "script.run" , "setting"};
 
-QString absolutePath(FolderFlag flag)
+QStringList &readInfo()
 {
-    if(! insureDirectory(folderName[flag]))
-        return QString();
+    QStringList &infos = myInfos();
+    infos.clear();
 
-    return QDir(folderName[flag]).absolutePath();
+    QString filepath = absolutePath(InfoFile);
+    if(filepath.isEmpty())
+        return infos;
+
+    QFile file(filepath);
+    if(! file.open(QIODevice::ReadOnly) )
+        return infos;
+    QTextStream in(&file);
+    while(! in.atEnd())
+        infos << in.readLine();
+
+    return infos;
 }
+
+bool writeInfo(const QStringList &infos)
+{
+    QFile file(absolutePath(InfoFile));
+    if(! file.open(QIODevice::WriteOnly) )
+        return false;
+    QTextStream out(&file);
+    foreach (const QString &it, infos) {
+        out << it;
+    }
+    return true;
+}
+
+QString absolutePath(MyNameFlags flag)
+{
+    switch (flag)
+    {
+    case InfoFile:
+    {
+        QFileInfo info(MyNames[flag]);
+
+        if(info.exists() && ! info.isFile())
+            return QString();
+        else
+            return info.absoluteFilePath();
+        break;
+    }
+    default:
+    {
+        if( ! insureDirectory(MyNames[flag]))
+            return QString();
+        else
+            return QDir(MyNames[flag]).absolutePath();
+        break;
+    }
+    }
+}
+
 
 bool insureDirectory(const QString &directory)
 {

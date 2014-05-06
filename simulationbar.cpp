@@ -18,19 +18,31 @@
 #include <QAction>
 #include <QStandardItemModel>
 #include <QFileSystemModel>
+#include <QUrl>
+#include <QDesktopServices>
+#include <QListView>
+#include <QDebug>
 
 SimulationBar::SimulationBar(QWidget *parent) :
     QToolBar(parent)
 { 
     envModel = new QFileSystemModel(this);
+    envModel->setNameFilterDisables(false);
+    envModel->setNameFilters(QStringList()<< "*.run.cmd" << "*.run.sh");
     envModel->setFilter(QDir::Files);
-    envModel->setNameFilters(QStringList()<< "*.cmd" << "*.sh");
-    envModel->setRootPath(absolutePath(ConfigFolder));
 
     box = new QComboBox;
     box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     box->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    box->setModel(envModel);
+
+    QString tmpPath = absolutePath(ConfigFolder);
+    if( !tmpPath.isEmpty())
+    {
+        QModelIndex tmpIndex = envModel->setRootPath(tmpPath);
+        box->setModel(envModel);
+        box->setRootModelIndex(tmpIndex);
+        box->setCurrentIndex(0);
+    }
 
     exportButton = new QToolButton;
     exportButton->setIcon(QIcon(":/icon/images/task.png"));
@@ -44,14 +56,15 @@ SimulationBar::SimulationBar(QWidget *parent) :
     simuButton->setCheckable(true);
     simuButton->setObjectName("Switcher");
 
-    QLabel *envLabel = new QLabel("Execution Environment: ");
-    envLabel->setObjectName("TitleLabel");
+    envButton = new QToolButton(this);
+    envButton->setText("Execution Environment");
+    envButton->setObjectName("TitleButton");
 
     QWidget *sep = new QWidget;
     sep->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
     this->setObjectName("TitleBar");
-    this->addWidget(envLabel);
+    this->addWidget(envButton);
     this->addWidget (box);
     this->addWidget (exportButton);
     this->addWidget(sep);
@@ -61,10 +74,18 @@ SimulationBar::SimulationBar(QWidget *parent) :
 
     connect(exportButton,SIGNAL(clicked()),this,SIGNAL(exportTriggered()) );
     connect(simuButton,SIGNAL(toggled(bool)),this,SLOT(showSimulation(bool)) );
+    connect(envButton,SIGNAL(clicked()), this, SLOT(exploreRunScripts()));
 }
 
 QFileInfo SimulationBar::currentEnvInfo() const
 {  return QFileInfo(envModel->rootDirectory().absoluteFilePath(box->currentText()) );}
+
+void SimulationBar::exploreRunScripts()
+{
+    QString tmp = absolutePath(ConfigFolder);
+    if( !tmp.isEmpty())
+        QDesktopServices::openUrl( QUrl::fromLocalFile(tmp));
+}
 
 void SimulationBar::showSimulation(bool show)
 {

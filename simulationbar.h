@@ -32,9 +32,11 @@ signals:
     void simulationTriggered(bool show);
 private slots:
     void showSimulation(bool show);
+    void exploreRunScripts();
 private:
     QToolButton *exportButton;
     QToolButton *simuButton;
+    QToolButton *envButton;
     QComboBox *box;
 
     QFileSystemModel *envModel;

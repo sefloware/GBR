@@ -27,7 +27,7 @@ OutputDialog::OutputDialog(QWidget *parent, Qt::WindowFlags flags) :
     connect(this,SIGNAL(accepted()),this,SLOT(savePath()) );
 
     ui->checkBox->setChecked(false);
-    initializePath();
+    ui->lineEdit2->setText(defaultPath());
 }
 
 OutputDialog::~OutputDialog()
@@ -35,40 +35,14 @@ OutputDialog::~OutputDialog()
     delete ui;
 }
 
-void OutputDialog::initializePath()
-{
-    ui->lineEdit2->setText(QDir::homePath());
-
-    QString confpath = absolutePath(ConfigFolder);
-    if( confpath.isEmpty())
-        return; //For simplification
-
-    QFile file( QDir(confpath).absoluteFilePath("default_path") );
-    if( ! file.open(QIODevice::ReadOnly))
-        return; //For simplification
-
-    QString defautpath = file.readAll();
-    if (! defautpath.isEmpty())
-        ui->lineEdit2->setText(defautpath);
- }
 
 QString OutputDialog::defaultPath()
 {
-    QString confpath = absolutePath(ConfigFolder);
-    if( confpath.isEmpty())
-        return QDir::homePath(); //For simplification
-
-    QFile file( QDir(confpath).absoluteFilePath("default_path") );
-    if( ! file.open(QIODevice::ReadOnly))
-        return QDir::homePath(); //For simplification
-
-    QString path = file.readAll();
-    path = path.trimmed();
-    if(path.isEmpty())
+    if(myInfos().size()<2)
         return QDir::homePath();
-
-    return path;
+    return  myInfos().at(1);
 }
+
 
 void OutputDialog::savePath()
 {

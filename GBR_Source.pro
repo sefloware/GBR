@@ -12,6 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = GBR_Source
 TEMPLATE = app
 
+INCLUDEPATH = "C:\Program Files\Microsoft Visual Studio 10.0\VC\include\opt"
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -57,7 +58,8 @@ SOURCES += main.cpp\
     stcode.cpp \
     stscparser.cpp \
     table.cpp \
-    qrcfile.cpp
+    qrcfile.cpp \
+    texteditdialog.cpp
 
 HEADERS  += mainwindow.h \
     project.h \
@@ -104,10 +106,12 @@ HEADERS  += mainwindow.h \
     seed.h \
     stscparser.h \
     table.h \
-    tabledelegate.h
+    tabledelegate.h \
+    texteditdialog.h
 
 FORMS    += \
-    outputdialog.ui
+    outputdialog.ui \
+    texteditdialog.ui
 
 RESOURCES += \
     source.qrc

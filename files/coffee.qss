@@ -55,6 +55,12 @@ QLabel#TitleLabel {
 font: normal 17pt;
 color: white;
 }
+
+QToolButton#TitleButton {
+font: normal 17pt;
+color: white;
+}
+
 /*************/
 
 /*****QToolBar*****/

@@ -29,7 +29,6 @@ class OutputDialog : public QDialog
 public:
     explicit OutputDialog(QWidget *parent = 0, Qt::WindowFlags flags = 0);
     ~OutputDialog();
-    void initializePath();
     void setNameValidator(const QValidator *nameValidator);
     QString getPath();
 

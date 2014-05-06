@@ -44,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(startPage->codist,SIGNAL(updateEditorEnvironment()), this, SLOT(updateEditorEnvironment()) );
 
     setCentralWidget(tabWidget);
+
+    readInfo();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

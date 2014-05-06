@@ -51,16 +51,19 @@ void OutputDialog::savePath()
     if(! ui->checkBox->isChecked() || defautpath.isEmpty())
         return;
 
-    QString confpath = absolutePath(ConfigFolder);
-    if( confpath.isEmpty())
-        return; //For simplification
+    switch (myInfos().size()) {
+    case 0:
+        myInfos() << "" << defautpath;
+        break;
+    case 1:
+        myInfos() << defautpath;
+        break;
+    default:
+        myInfos().replace(1,defautpath);
+        break;
+    }
 
-    QFile file( QDir(confpath).absoluteFilePath("default_path") );
-
-    if(! file.remove() || ! file.open(QIODevice::WriteOnly))
-        return; //For simplification
-
-    file.write(defautpath.toLocal8Bit());
+    writeInfo(myInfos());
 }
 
 void OutputDialog::textChanged()

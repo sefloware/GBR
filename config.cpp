@@ -54,13 +54,19 @@ QStringList &readInfo()
 
 bool writeInfo(const QStringList &infos)
 {
-    QFile file(absolutePath(InfoFile));
+    QString tmpPath = absolutePath(InfoFile);
+    if(tmpPath.isEmpty())
+        return false;
+
+    QFile file(tmpPath);
     if(! file.open(QIODevice::WriteOnly) )
         return false;
+
     QTextStream out(&file);
     foreach (const QString &it, infos) {
-        out << it;
+        out << it << '\n';
     }
+
     return true;
 }
 

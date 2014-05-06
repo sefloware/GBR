@@ -14,3 +14,9 @@ ui_*.h
 
 #ignore all log file
 *.log
+
+#ignore all object file
+*.o
+
+#ignore all moc_*file
+moc_*.cpp

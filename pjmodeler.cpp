@@ -132,7 +132,7 @@ PjModeler::PjModeler(const QDir &dir, QWidget *parent, QSqlDatabase db) :
     QStringList conststrs;
     conststrs << "//!" << "for(unsigned long istep=0;istep<steps;++istep)";
     QFile file( dir.absoluteFilePath("main.cpp"));
-    file.setPermissions( QFileDevice::WriteOwner);
+//    file.setPermissions( QFileDevice::WriteOwner);
     editor->setEnabled( file.open(QIODevice::ReadOnly));
     editor->setPlainText( file.readAll());
     editor->setConstStrings( conststrs);

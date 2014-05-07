@@ -369,7 +369,7 @@ void TableView::selectionChanged(const QItemSelection &selected, const QItemSele
     {
         int hFlag = model()->headerData(idxs.first().column(),Qt::Horizontal,Item::HeaderFlagRole).toInt();
         int vFlag = model()->headerData(idxs.first().row(),Qt::Vertical,Item::DataRole).toInt();
-        bool enable = ( hFlag == Item::Parameter) && (vFlag == Item::OtherRow) ||
+        bool enable = (( hFlag == Item::Parameter) && (vFlag == Item::OtherRow)) ||
                 ( hFlag & (Item::Times | Item::FileOt | Item::FileSt) && (vFlag & (Item::SimData | Item::NoSimData)));
         m_del->setEnabled(enable);
     }

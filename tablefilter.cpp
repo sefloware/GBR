@@ -114,7 +114,7 @@ int TableFilter::generateMain(const QString &mainsource, const QString &path, QS
         fm.write(cmain.toLocal8Bit());
 
         QFile ft(dir.absoluteFilePath("times"));
-        if(!ft.open(QIODevice::WriteOnly|QIODevice::Truncate|QIODevice::Text) )
+        if(!ft.open(QIODevice::WriteOnly|QIODevice::Truncate) )
         {
             QMessageBox::critical(parent,tr("Error"),tr("Failed to create the file:\n") + ft.fileName(),QMessageBox::Ok,QMessageBox::Ok);
             return 0;

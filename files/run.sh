@@ -4,7 +4,7 @@ cores=%1
 state=0
 for folder in *; do
     if [ ! -z "${folder##*[!0-9]*}" ]; then
-    for((i=$(($(cat $folder/times)-1));i>-1;i--)); do
+    for i in(seq $(($(cat $folder/times)-1)) -1 0); do
         begin=$(cat mark)
         begin=$(($begin+1))
         sds=$(sed -n "${begin}p" seeds)
@@ -30,3 +30,4 @@ for folder in *; do
 done
 
 echo '>----The process completes successfully!----'
+
